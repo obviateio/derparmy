@@ -95,9 +95,9 @@ var Particle = function ( id, x, y, sx, sy ) {
 
 
 
-var throwCard = function ( x, y ) {
-	//Pick a random image and put it in the particle stack
-	var randomNum = Math.floor((Math.random() * totalParticles));
+var throwCard = function ( x, y, which ) {
+	var randomNum = which;
+	if( which == undefined ) var randomNum = Math.floor( ( Math.random() * totalParticles ) );
 	var particle = new Particle( randomNum, x, y, Math.floor( Math.random() * 6 - 3 ) * 2, - Math.random() * 16 );
 	console.log("pushing particle #"+randomNum + " -- Current particle count: "+particles.length)
 	particles.push( particle );
@@ -105,6 +105,11 @@ var throwCard = function ( x, y ) {
 
 document.addEventListener( 'mousedown', function ( event ) {
 	//Click? Particle!
+	if( event.button == 2 ) { 
+		for( var i in source ) {
+			throwCard( event.clientX, event.clientY, i );
+		}
+	}
 	event.preventDefault();
 	document.addEventListener( 'mousemove', onMouseMove, false );
 }, false );
@@ -121,6 +126,11 @@ function onMouseMove( event ) {
 	event.preventDefault();
 	throwCard( event.clientX, event.clientY );
 }
+
+document.addEventListener( 'contextmenu', function(e) {
+	e.preventDefault();
+	}, true
+);
 
 document.addEventListener( 'touchstart', function ( event ) {
 	//Touch is sexy? Particle!
